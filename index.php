@@ -101,6 +101,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
     <script src="js/main.js" type="module" defer></script>
+    <script>
+        // Set API configuration
+        window.API_CONFIG = {
+            baseUrl: 'php/api/',
+            pythonApiUrl: 'http://localhost:5000/api/',
+            authToken: localStorage.getItem('auth_token')
+        };
+    </script>
     
 </head>
 <body class="bg-[#FFF6E8]">
@@ -203,6 +211,8 @@
                             </ul>
                         </div>
                     </li>
+                      
+                    
 
                     <li class="menu-option">
                         <div class="menu-name flex justify-between items-center space-x-3 hover:bg-[#F7E6CA] px-4 py-3 rounded-lg transition duration-300 ease-in-out cursor-pointer" onclick="toggleDropdown('admin-dropdown', this)">

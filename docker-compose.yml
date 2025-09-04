@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: hr_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: hr441
+      MYSQL_USER: hr_user
+      MYSQL_PASSWORD: hr_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./hr4_complete_database.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - hr_network
+
+  # PHP Application
+  php_app:
+    build: .
+    container_name: hr_php
+    ports:
+      - "8000:80"
+      - "5000:5000"
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=hr_user
+      - DB_PASS=hr_password
+      - DB_NAME=hr441
+      - JWT_SECRET_KEY=your_jwt_secret_key_here
+      - APP_ENV=production
+    depends_on:
+      - mysql
+    volumes:
+      - ./uploads:/var/www/html/uploads
+    networks:
+      - hr_network
+
+  # Python Analytics Service (separate container)
+  python_analytics:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: hr_python
+    ports:
+      - "5001:5000"
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=hr_user
+      - DB_PASS=hr_password
+      - DB_NAME=hr441
+      - JWT_SECRET_KEY=your_jwt_secret_key_here
+      - APP_ENV=production
+    depends_on:
+      - mysql
+    networks:
+      - hr_network
+
+volumes:
+  mysql_data:
+
+networks:
+  hr_network:
+    driver: bridge

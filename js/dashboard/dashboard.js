@@ -6,7 +6,7 @@
  * v1.2 - Applied system color theme to dashboard cards and charts.
  * v1.1 - Added role-based dashboard views.
  */
-import { API_BASE_URL } from '../utils.js';
+import { API_BASE_URL, pythonApiRequest, apiRequest } from '../utils.js';
 
 // --- DOM Element References ---
 let pageTitleElement;
@@ -67,13 +67,29 @@ export async function displayDashboardSection() {
 
 
     try {
-        const apiUrl = `${API_BASE_URL}get_dashboard_summary.php?role=${encodeURIComponent(user.role_name)}`;
-        console.log(`[Dashboard] Fetching summary data from: ${apiUrl}`);
-        const response = await fetch(apiUrl);
-        console.log(`[Dashboard] Raw response status: ${response.status}`);
+        // Fetch basic dashboard data from PHP API
+        const basicData = await apiRequest(`get_dashboard_summary.php?role=${encodeURIComponent(user.role_name)}`);
+        console.log("[Dashboard] Basic data:", basicData);
 
-        const summaryData = await handleApiResponse(response); 
-        console.log("[Dashboard] Parsed summary data:", summaryData);
+        // Fetch advanced analytics from Python API
+        let analyticsData = {};
+        try {
+            const analyticsResponse = await pythonApiRequest('analytics/dashboard');
+            analyticsData = analyticsResponse.data || {};
+            console.log("[Dashboard] Analytics data:", analyticsData);
+        } catch (analyticsError) {
+            console.warn("[Dashboard] Python analytics unavailable:", analyticsError);
+        }
+
+        // Merge data sources
+        const summaryData = {
+            ...basicData,
+            ...analyticsData,
+            charts: {
+                ...basicData.charts,
+                ...analyticsData
+            }
+        };
 
         if (summaryData.error) { 
             throw new Error(summaryData.error);

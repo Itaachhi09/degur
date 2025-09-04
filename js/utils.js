@@ -1,9 +1,81 @@
 /**
  * Shared Utilities for HR Management System
+ * Updated for REST API integration
  */
 
 // Base URL for API calls
-export const API_BASE_URL = 'php/api/'; // Ensure this path is correct relative to index.php
+export const API_BASE_URL = 'php/api/';
+export const PYTHON_API_URL = 'http://localhost:5000/api/';
+
+// JWT token management
+let authToken = localStorage.getItem('auth_token');
+
+export function setAuthToken(token) {
+    authToken = token;
+    localStorage.setItem('auth_token', token);
+}
+
+export function getAuthToken() {
+    return authToken || localStorage.getItem('auth_token');
+}
+
+export function clearAuthToken() {
+    authToken = null;
+    localStorage.removeItem('auth_token');
+}
+
+// API request helper with authentication
+export async function apiRequest(endpoint, options = {}) {
+    const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+    
+    const defaultOptions = {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+    
+    // Add authentication header if token exists
+    const token = getAuthToken();
+    if (token) {
+        defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    const finalOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    };
+    
+    try {
+        const response = await fetch(url, finalOptions);
+        
+        // Handle 401 Unauthorized
+        if (response.status === 401) {
+            clearAuthToken();
+            window.location.href = '/login';
+            return;
+        }
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('API request failed:', error);
+        throw error;
+    }
+}
+
+// Python API request helper
+export async function pythonApiRequest(endpoint, options = {}) {
+    const url = `${PYTHON_API_URL}${endpoint}`;
+    return apiRequest(url, options);
+}
 
 /**
  * Fetches employees and populates a given select element.
@@ -34,18 +106,11 @@ export async function populateEmployeeDropdown(selectElementId, includeAllOption
     selectElement.appendChild(placeholderOption);
 
     try {
-        const apiUrl = `${API_BASE_URL}get_employees.php`;
-        const response = await fetch(apiUrl);
+        const response = await apiRequest('employees');
+        const employees = response.data?.employees || response.employees || [];
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, Response: ${errorText.substring(0, 100)}...`);
-        }
-
-        const employees = await response.json();
-
-        if (employees.error) {
-            console.error(`[populateEmployeeDropdown] API error for '${selectElementId}':`, employees.error);
+        if (response.error) {
+            console.error(`[populateEmployeeDropdown] API error for '${selectElementId}':`, response.error);
             placeholderOption.textContent = 'Error loading!';
             placeholderOption.disabled = true;
         } else if (!Array.isArray(employees)) {
