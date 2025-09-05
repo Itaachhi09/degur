@@ -6,9 +6,7 @@
  * v1.4 - Integrated PHPMailer.
  */
 
-// --- PHPMailer ---
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+// --- PHPMailer Removed ---
 
 // --- Error Reporting & Headers ---
 error_reporting(E_ALL);
@@ -29,16 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// --- Composer Autoloader ---
-// Adjust the path based on your project structure and vendor directory location
-$pathToVendor = __DIR__ . '/../../vendor/autoload.php'; // Assumes vendor is two levels up from api folder
-if (file_exists($pathToVendor)) {
-    require $pathToVendor;
-} else {
-    error_log("Login API Notice: PHPMailer vendor/autoload.php not found at " . $pathToVendor . ". Email functionality will be disabled.");
-    // Don't exit - allow login to continue without email functionality
-}
-// --- End Composer Autoloader ---
+// PHPMailer autoloader removed
 
 
 // --- Database Connection ---
@@ -55,69 +44,40 @@ try {
     exit;
 }
 
-// --- Email Sending Function (using PHPMailer) ---
-/**
- * Sends the 2FA code using PHPMailer and Gmail SMTP.
- * Reads credentials from environment variables.
- *
- * @param string $recipientEmail The recipient's email address.
- * @param string $code The 2FA code to send.
- * @param string $username The user's username (for email content).
- * @return bool True on success, false on failure.
- */
-function send_2fa_email_code_phpmailer(string $recipientEmail, string $code, string $username): bool {
-    // Check if PHPMailer classes are available
-    if (!class_exists('PHPMailer\PHPMailer\PHPMailer')) {
-        error_log("send_2fa_email_code_phpmailer: PHPMailer classes not available. Email functionality disabled.");
-        return false; // Cannot send email without PHPMailer
-    }
-    
-    // --- Get Credentials from Environment Variables ---
-    $gmailUser = getenv('GMAIL_USER');
-    $gmailAppPassword = getenv('GMAIL_APP_PASSWORD');
+// --- Send 2FA email via Python notify service ---
+function send_2fa_email_via_python(string $recipientEmail, string $code, string $username): bool {
+    $pythonBase = rtrim(getenv('PYTHON_API_BASE') ?: 'http://localhost:5000/api', '/');
+    $url = $pythonBase . '/notify/email';
 
-    if (empty($gmailUser) || empty($gmailAppPassword)) {
-        error_log("send_2fa_email_code_phpmailer: GMAIL_USER or GMAIL_APP_PASSWORD environment variables not set.");
-        return false; // Cannot send email without credentials
-    }
-    // --- End Get Credentials ---
+    $subject = 'Your Avalon HR System Login Code';
+    $body = "Hello " . htmlspecialchars($username) . ",\n\n" .
+            "Your two-factor authentication code is: " . $code . "\n\n" .
+            "This code will expire in 10 minutes.\n\n" .
+            "If you did not request this code, please ignore this email or contact support.";
 
+    $payload = json_encode([
+        'to' => $recipientEmail,
+        'subject' => $subject,
+        'body' => $body,
+        'is_html' => false
+    ]);
 
-    $mail = new PHPMailer(true); // Passing `true` enables exceptions
-
-    try {
-        // Server settings
-        $mail->SMTPDebug = 0;                      // Disable verbose debug output (set to 2 for testing)
-        $mail->isSMTP();                           // Send using SMTP
-        $mail->Host       = 'smtp.gmail.com';      // Set the SMTP server to send through
-        $mail->SMTPAuth   = true;                  // Enable SMTP authentication
-        $mail->Username   = $gmailUser;            // SMTP username (your Gmail address)
-        $mail->Password   = $gmailAppPassword;     // SMTP password (your App Password)
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Enable implicit TLS encryption
-        $mail->Port       = 465;                   // TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-        // Recipients
-        $mail->setFrom($gmailUser, 'Avalon HR System'); // Sender Email and Name
-        $mail->addAddress($recipientEmail);           // Add a recipient
-
-        // Content
-        $mail->isHTML(false); // Set email format to plain text
-        $mail->Subject = 'Your Avalon HR System Login Code';
-        $mail->Body    = "Hello " . htmlspecialchars($username) . ",\n\n" .
-                         "Your two-factor authentication code is: " . $code . "\n\n" .
-                         "This code will expire in 10 minutes.\n\n" .
-                         "If you did not request this code, please ignore this email or contact support.";
-        $mail->AltBody = $mail->Body; // Simple plain text alternative body
-
-        $mail->send();
-        error_log("2FA Email Sent successfully to: " . $recipientEmail);
-        return true;
-    } catch (Exception $e) {
-        error_log("PHPMailer Error: Message could not be sent. Mailer Error: {$mail->ErrorInfo}. Exception: {$e->getMessage()}");
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if ($response === false) {
+        error_log('send_2fa_email_via_python: cURL error: ' . curl_error($ch));
+        curl_close($ch);
         return false;
     }
+    curl_close($ch);
+    return $httpCode >= 200 && $httpCode < 300;
 }
-// --- End Email Sending Function ---
 
 
 // --- Login Logic ---
@@ -218,9 +178,10 @@ try {
             exit;
         }
 
-        // Send the code via email using PHPMailer function
-        if (!send_2fa_email_code_phpmailer($user['EmployeeEmail'], $two_factor_code, $user['Username'])) {
-            error_log("2FA Email Error: Failed to send 2FA code email to {$user['EmployeeEmail']} for UserID {$user['UserID']} using PHPMailer.");
+        // Send email via Python notify service
+        $emailOk = send_2fa_email_via_python($user['EmployeeEmail'], $two_factor_code, $user['Username']);
+        if (!$emailOk) {
+            error_log("2FA Email Error: Failed to send 2FA code via Python service to {$user['EmployeeEmail']} for UserID {$user['UserID']}.");
             http_response_code(500);
             echo json_encode(['error' => 'Failed to send two-factor authentication code via email.']);
             exit;
@@ -230,8 +191,8 @@ try {
         http_response_code(200); // OK, but login is not complete yet
         echo json_encode([
             'two_factor_required' => true,
-            'message' => 'Two-factor authentication required. Please check your email (' . htmlspecialchars($user['EmployeeEmail']) . ') for the code.',
-            'user_id_temp' => $user['UserID'] // Send UserID temporarily
+            'message' => 'Two-factor authentication required. A code was sent to your email.',
+            'user_id_temp' => $user['UserID']
         ]);
         exit;
 

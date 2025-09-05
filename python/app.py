@@ -13,6 +13,9 @@ from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
 import logging
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # Load environment variables
 load_dotenv()
@@ -48,6 +51,47 @@ def get_db_connection():
         logger.error(f"Database connection error: {e}")
         return None
 
+def send_email_smtp(recipient_email: str, subject: str, body: str, is_html: bool = False) -> tuple[bool, str]:
+    """Send an email using SMTP settings from environment variables.
+
+    Returns (success, message)
+    """
+    smtp_host = os.getenv('SMTP_HOST', 'smtp.gmail.com')
+    smtp_port = int(os.getenv('SMTP_PORT', '587'))
+    smtp_user = os.getenv('SMTP_USER', '')
+    smtp_pass = os.getenv('SMTP_PASS', '')
+    smtp_from = os.getenv('SMTP_FROM', smtp_user)
+    use_tls = os.getenv('SMTP_USE_TLS', 'true').lower() == 'true'
+
+    if not smtp_user or not smtp_pass or not smtp_from:
+        return False, 'SMTP credentials not configured'
+
+    try:
+        message = MIMEMultipart('alternative') if is_html else MIMEMultipart()
+        message['From'] = smtp_from
+        message['To'] = recipient_email
+        message['Subject'] = subject
+
+        if is_html:
+            mime_part = MIMEText(body, 'html')
+        else:
+            mime_part = MIMEText(body, 'plain')
+        message.attach(mime_part)
+
+        server = smtplib.SMTP(smtp_host, smtp_port, timeout=15)
+        try:
+            if use_tls:
+                server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_from, [recipient_email], message.as_string())
+        finally:
+            server.quit()
+
+        return True, 'Email sent'
+    except Exception as e:
+        logger.error(f"SMTP send error: {e}")
+        return False, f"SMTP send error: {e}"
+
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
@@ -56,6 +100,35 @@ def health_check():
         'timestamp': datetime.now().isoformat(),
         'service': 'hr-python-api'
     })
+
+@app.route('/api/notify/email', methods=['POST'])
+def notify_email():
+    """Send an email notification via SMTP.
+
+    Request JSON:
+    {
+        "to": "recipient@example.com",
+        "subject": "Subject line",
+        "body": "Text or HTML",
+        "is_html": false
+    }
+    """
+    try:
+        payload = request.get_json(silent=True) or {}
+        recipient = (payload.get('to') or '').strip()
+        subject = (payload.get('subject') or '').strip()
+        body = payload.get('body') or ''
+        is_html = bool(payload.get('is_html', False))
+
+        if not recipient or not subject or not body:
+            return jsonify({'success': False, 'error': 'Missing to/subject/body'}), 400
+
+        ok, msg = send_email_smtp(recipient, subject, body, is_html)
+        status = 200 if ok else 500
+        return jsonify({'success': ok, 'message': msg}), status
+    except Exception as e:
+        logger.error(f"notify_email error: {e}")
+        return jsonify({'success': False, 'error': 'Failed to send email'}), 500
 
 @app.route('/api/analytics/dashboard', methods=['GET'])
 @jwt_required()

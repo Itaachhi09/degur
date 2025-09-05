@@ -4,8 +4,7 @@
  * Generates and sends a 2FA code to the logged-in user's email for a specific context (e.g., password change).
  */
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+// PHPMailer removed
 
 // --- Error Reporting & Headers ---
 error_reporting(E_ALL);
@@ -26,16 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// --- Composer Autoloader for PHPMailer ---
-$pathToVendor = __DIR__ . '/../../vendor/autoload.php';
-if (file_exists($pathToVendor)) {
-    require $pathToVendor;
-} else {
-    error_log("Request 2FA Code API Error: PHPMailer vendor/autoload.php not found at " . $pathToVendor);
-    http_response_code(500);
-    echo json_encode(['error' => 'Server configuration error: Email library components missing.']);
-    exit;
-}
+// PHPMailer autoloader removed
 
 // --- Database Connection ---
 $pdo = null;
@@ -119,55 +109,40 @@ try {
         throw new Exception('Failed to update 2FA code in database.');
     }
 
-    // --- Send Email with PHPMailer ---
-    $mail = new PHPMailer(true);
-    $emailSent = false;
-    try {
-        // Gmail SMTP Configuration - GET FROM ENVIRONMENT VARIABLES
-        $gmailUser = getenv('GMAIL_USER');
-        $gmailAppPassword = getenv('GMAIL_APP_PASSWORD');
+    // Send email via Python notify service
+    $pythonBase = rtrim(getenv('PYTHON_API_BASE') ?: 'http://localhost:5000/api', '/');
+    $url = $pythonBase . '/notify/email';
 
-        if (empty($gmailUser) || empty($gmailAppPassword)) {
-            error_log("PHPMailer GMAIL_USER or GMAIL_APP_PASSWORD environment variables not set.");
-            throw new Exception('Email server configuration error.');
-        }
+    $subject = 'Your Avalon HR Password Change Verification Code';
+    $body = "Hello {$user_info['FirstName']},\n\n" .
+            "Your verification code to change your password is: {$two_factor_code}\n\n" .
+            "This code will expire in 10 minutes.\n\n" .
+            "If you did not request this, please secure your account or contact support immediately.";
 
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = $gmailUser;
-        $mail->Password   = $gmailAppPassword;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port       = 465;
+    $payload = json_encode([
+        'to' => $user_info['EmployeeEmail'],
+        'subject' => $subject,
+        'body' => $body,
+        'is_html' => false
+    ]);
 
-        $mail->setFrom($gmailUser, 'Avalon HR System');
-        $mail->addAddress($user_info['EmployeeEmail'], $user_info['FirstName']);
-
-        $mail->isHTML(true);
-        $mail->Subject = 'Your Avalon HR Password Change Verification Code';
-        $mail->Body    = "Hello {$user_info['FirstName']},<br><br>" .
-                         "Your verification code to change your password is: <b>{$two_factor_code}</b><br><br>" .
-                         "This code will expire in 10 minutes.<br><br>" .
-                         "If you did not request this, please secure your account or contact support immediately.";
-        $mail->AltBody = "Hello {$user_info['FirstName']},\n\nYour verification code to change your password is: {$two_factor_code}\n\nThis code will expire in 10 minutes.\n\nIf you did not request this, please secure your account or contact support immediately.";
-
-        $mail->send();
-        $emailSent = true;
-    } catch (Exception $e) {
-        error_log("PHPMailer Error sending 2FA code for password change to {$user_info['EmployeeEmail']} (UserID: {$loggedInUserId}): {$mail->ErrorInfo}. Exception: {$e->getMessage()}");
-        // Don't throw to client, but log it. The main response will indicate failure.
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    if ($response === false || $httpCode < 200 || $httpCode >= 300) {
+        error_log("Request 2FA Code Email Error: Failed to send via Python service to {$user_info['EmployeeEmail']} (HTTP {$httpCode}). cURL: " . curl_error($ch));
+        curl_close($ch);
+        throw new Exception('Failed to send 2FA code email. Please try again.');
     }
-    // --- End Send Email ---
+    curl_close($ch);
 
-    if ($emailSent) {
-        http_response_code(200);
-        echo json_encode(['message' => 'A 2FA code has been sent to your email address.']);
-    } else {
-        // If email sending failed, we should ideally roll back the DB update of the code,
-        // or at least inform the user that the code was generated but not sent.
-        // For simplicity here, we'll just return a generic error.
-        throw new Exception('Failed to send 2FA code email. Please try again or contact support.');
-    }
+    http_response_code(200);
+    echo json_encode(['message' => 'A 2FA code has been sent to your email address.']);
 
 } catch (Exception $e) { // Catches custom exceptions and PHPMailer exceptions
     error_log("Request 2FA Code API Error: " . $e->getMessage());
