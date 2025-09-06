@@ -40,7 +40,8 @@ import { displayUserProfileSection } from './profile/profile.js';
 // --- Import Notification Functions ---
 // NOTE: Folder name is 'notifictions' in the project structure
 import { initializeNotificationSystem, stopNotificationFetching, onNotificationDropdownOpen, onNotificationDropdownClose } from './notifictions/notifications.js';
-
+// HMO & Benefits UI
+import { displayHmoBenefitsSection } from './hmo_benefits_ui.js';
 
 // --- Global Variables ---
 window.currentUser = null;
@@ -74,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         employees: document.getElementById('employees-link')?.closest('li'),
         documents: document.getElementById('documents-link')?.closest('li'),
         orgStructure: document.getElementById('org-structure-link')?.closest('li'),
-        // Time & Attendance - REMOVED
+    // Time & Attendance - REMOVED
         payroll: document.querySelector('[onclick*="payroll-dropdown"]')?.closest('.menu-option'),
         payrollRuns: document.getElementById('payroll-runs-link')?.closest('li'),
         salaries: document.getElementById('salaries-link')?.closest('li'),
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deductions: document.getElementById('deductions-link')?.closest('li'),
         payslips: document.getElementById('payslips-link')?.closest('li'),
         // Claims - REMOVED
-        // Leave Management - REMOVED
+    // Leave Management - REMOVED
         compensation: document.querySelector('[onclick*="compensation-dropdown"]')?.closest('.menu-option'),
         compPlans: document.getElementById('comp-plans-link')?.closest('li'),
         salaryAdjust: document.getElementById('salary-adjust-link')?.closest('li'),
@@ -93,6 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
         analyticsMetrics: document.getElementById('analytics-metrics-link')?.closest('li'),
         admin: document.querySelector('[onclick*="admin-dropdown"]')?.closest('.menu-option'),
         userManagement: document.getElementById('user-management-link')?.closest('li'),
+    // HMO & Benefits
+    hmoMenu: document.querySelector('[onclick*="HMO_Benifits-dropdown"]')?.closest('.menu-option'),
+    hmoBenefits: document.getElementById('hmo-benefits-link')?.closest('li'),
+    hmoProviders: document.getElementById('hmo-providers-link')?.closest('li'),
+    hmoReports: document.getElementById('hmo-reports-link')?.closest('li'),
     };
 
     // --- Error Handling for Missing Core Elements ---
@@ -268,12 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sidebarItems.orgStructure && !sidebarItems.orgStructure.classList.contains('hidden')) {
              addClickListenerOnce(sidebarItems.orgStructure.querySelector('a'), displayOrgStructureSection);
         }
-        if (sidebarItems.attendance && !sidebarItems.attendance.classList.contains('hidden')) {
-             addClickListenerOnce(sidebarItems.attendance.querySelector('a'), displayAttendanceSection);
-        }
-        if (sidebarItems.timesheets && !sidebarItems.timesheets.classList.contains('hidden')) {
-             addClickListenerOnce(sidebarItems.timesheets.querySelector('a'), displayTimesheetsSection);
-        }
+    // Attendance and timesheets listeners removed (module deleted)
         if (sidebarItems.schedules && !sidebarItems.schedules.classList.contains('hidden')) {
              addClickListenerOnce(sidebarItems.schedules.querySelector('a'), displaySchedulesSection);
         }
@@ -317,6 +318,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (sidebarItems.userManagement && !sidebarItems.userManagement.classList.contains('hidden')) {
             addClickListenerOnce(sidebarItems.userManagement.querySelector('a'), displayUserManagementSection);
+        }
+        // HMO listeners
+        if (sidebarItems.hmoBenefits && !sidebarItems.hmoBenefits.classList.contains('hidden')) {
+            addClickListenerOnce(sidebarItems.hmoBenefits.querySelector('a'), displayHmoBenefitsSection);
+        }
+        if (sidebarItems.hmoProviders && !sidebarItems.hmoProviders.classList.contains('hidden')) {
+            // Placeholder: providers view uses same HMO display for now
+            addClickListenerOnce(sidebarItems.hmoProviders.querySelector('a'), displayHmoBenefitsSection);
+        }
+        if (sidebarItems.hmoReports && !sidebarItems.hmoReports.classList.contains('hidden')) {
+            addClickListenerOnce(sidebarItems.hmoReports.querySelector('a'), displayHmoBenefitsSection);
         }
         console.log("Sidebar listeners attached/reattached.");
     }

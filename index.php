@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avalon</title>
+    <title></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -211,7 +211,22 @@
                             </ul>
                         </div>
                     </li>
-                      
+                      <li class="menu-option">
+                        <div class="menu-name flex justify-between items-center space-x-3 hover:bg-[#F7E6CA] px-4 py-3 rounded-lg transition duration-300 ease-in-out cursor-pointer" onclick="toggleDropdown('HMO_Benifits-dropdown', this)">
+                            <div class="flex items-center space-x-2">
+                                <i class="fa-solid fa-chart-line text-lg pr-4 menu-icon"></i>
+                                <span class="text-sm font-medium">Hmo & benifits</span>
+                            </div>
+                            <div class="arrow"><i class="bx bx-chevron-right text-lg font-semibold arrow-icon"></i></div>
+                        </div>
+                        <div id="HMO_Benifits-dropdown" class="menu-drop hidden flex-col w-full bg-[#F7E6CA] rounded-lg p-3 space-y-1 mt-1">
+                            <ul class="space-y-1">
+                                <li><a href="#" id="hmo-benefits-link" class="block px-3 py-1 text-sm text-gray-800 hover:bg-white rounded hover:text-[#4E3B2A]">HMO Benefits</a></li>
+                                <li><a href="#" id="hmo-providers-link" class="block px-3 py-1 text-sm text-gray-800 hover:bg-white rounded hover:text-[#4E3B2A]">Providers</a></li>
+                                <li><a href="#" id="hmo-reports-link" class="block px-3 py-1 text-sm text-gray-800 hover:bg-white rounded hover:text-[#4E3B2A]">Reports</a></li>
+                            </ul>
+                        </div>
+                    </li>
                     
 
                     <li class="menu-option">
