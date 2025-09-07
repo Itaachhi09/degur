@@ -38,7 +38,10 @@ export async function displayUserProfileSection() {
     if (!initializeProfileElements()) return;
 
     pageTitleElement.textContent = 'My Profile';
-    mainContentArea.innerHTML = '<p class="text-center py-4 text-gray-500">Loading profile information...</p>';
+    mainContentArea.innerHTML = `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="text-center py-4 text-gray-500">Loading profile information...</div>
+        </div>`;
 
     if (!window.currentUser || !window.currentUser.employee_id) {
         mainContentArea.innerHTML = '<p class="text-red-500 p-4">Error: Could not load profile. User information is missing. Please log in again.</p>';
@@ -268,7 +271,10 @@ function renderUserProfile(data, isEditMode = false, isChangePasswordMode = fals
             ${changePasswordFormHtml}
         </div>
     `;
-    mainContentArea.innerHTML = content;
+    mainContentArea.innerHTML = `
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            ${content}
+        </div>`;
 
     if (isEditMode && !isChangePasswordMode) {
         document.getElementById('profile-edit-form')?.addEventListener('submit', handleUpdateProfile);

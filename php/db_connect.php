@@ -26,14 +26,20 @@ $db_user = getenv('DB_USER') ?: 'root';           // Default to 'root' if env va
 $db_pass = getenv('DB_PASS') ?: '';               // Default to empty password if env var not set
 $charset = 'utf8mb4';
 
+// If a local override file exists (for development on XAMPP/local), include it.
+// `php/db_local.php` can set environment variables or call putenv() as needed.
+if (file_exists(__DIR__ . '/db_local.php')) {
+    require_once __DIR__ . '/db_local.php';
+}
+
 // --- Validate that essential variables were loaded ---
 // Check if critical variables are still using defaults or are empty, which might indicate
 // environment variables are not set correctly in production.
 if ($db_host === 'localhost' && getenv('DB_HOST') === false) {
     error_log("Warning: DB_HOST environment variable not set. Using default 'localhost'.");
 }
-if ($db_name === 'hr_integrated_db' && getenv('DB_NAME') === false) {
-    error_log("Warning: DB_NAME environment variable not set. Using default 'hr_integrated_db'.");
+if ($db_name === 'hr441' && getenv('DB_NAME') === false) {
+    error_log("Warning: DB_NAME environment variable not set. Using default 'hr441'.");
 }
 if ($db_user === 'root' && getenv('DB_USER') === false) {
      error_log("Warning: DB_USER environment variable not set. Using default 'root'.");

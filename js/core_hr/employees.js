@@ -50,7 +50,8 @@ export async function displayEmployeeSection() {
     }
     pageTitleElement.textContent = 'Employee Master List';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
             <div class="flex justify-between items-center">
                 <h3 class="text-lg font-semibold text-[#4E3B2A]">All Employees</h3>
                 <button id="add-new-employee-btn" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out flex items-center space-x-2">
@@ -60,6 +61,7 @@ export async function displayEmployeeSection() {
             </div>
             <div id="employee-list-container" class="overflow-x-auto">
                 <p class="text-center py-4">Loading employees...</p>
+            </div>
             </div>
         </div>`;
     

@@ -23,56 +23,59 @@ export async function displayOrgStructureSection() { // Renamed from displayOrgS
 
     pageTitleElement.textContent = 'Manage Organizational Structure';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                 <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Add New Department / Module</h3>
-                 <form id="add-department-form" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <label for="dept-name" class="block text-sm font-medium text-gray-700 mb-1">Name:</label>
-                            <input type="text" id="dept-name" name="department_name" required placeholder="e.g., Marketing or Sub-Module" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                     <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Add New Department / Module</h3>
+                     <form id="add-department-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label for="dept-name" class="block text-sm font-medium text-gray-700 mb-1">Name:</label>
+                                <input type="text" id="dept-name" name="department_name" required placeholder="e.g., Marketing or Sub-Module" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div>
+                                <label for="dept-parent-select" class="block text-sm font-medium text-gray-700 mb-1">Parent (Optional):</label>
+                                <select id="dept-parent-select" name="parent_department_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                    <option value="">-- No Parent (Top Level) --</option>
+                                </select>
+                            </div>
+                             <div>
+                                <label for="dept-manager-select" class="block text-sm font-medium text-gray-700 mb-1">Manager (Optional):</label>
+                                <select id="dept-manager-select" name="manager_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                    <option value="">-- Select Manager --</option>
+                                </select>
+                            </div>
+                             <div>
+                                <label for="dept-icon" class="block text-sm font-medium text-gray-700 mb-1">Icon Class (Optional):</label>
+                                <input type="text" id="dept-icon" name="icon" placeholder="e.g., fa-solid fa-users" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                             <div>
+                                <label for="dept-sort-order" class="block text-sm font-medium text-gray-700 mb-1">Sort Order (Optional):</label>
+                                <input type="number" id="dept-sort-order" name="sort_order" value="0" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div class="md:col-span-full">
+                                <label for="dept-description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional):</label>
+                                <textarea id="dept-description" name="description" rows="2" placeholder="Brief description..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
+                            </div>
                         </div>
-                        <div>
-                            <label for="dept-parent-select" class="block text-sm font-medium text-gray-700 mb-1">Parent (Optional):</label>
-                            <select id="dept-parent-select" name="parent_department_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                <option value="">-- No Parent (Top Level) --</option>
-                            </select>
+                         <div class="pt-2 space-x-3">
+                            <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                                Add Entry
+                            </button>
                         </div>
-                         <div>
-                            <label for="dept-manager-select" class="block text-sm font-medium text-gray-700 mb-1">Manager (Optional):</label>
-                            <select id="dept-manager-select" name="manager_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                <option value="">-- Select Manager --</option>
-                            </select>
-                        </div>
-                         <div>
-                            <label for="dept-icon" class="block text-sm font-medium text-gray-700 mb-1">Icon Class (Optional):</label>
-                            <input type="text" id="dept-icon" name="icon" placeholder="e.g., fa-solid fa-users" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                         <div>
-                            <label for="dept-sort-order" class="block text-sm font-medium text-gray-700 mb-1">Sort Order (Optional):</label>
-                            <input type="number" id="dept-sort-order" name="sort_order" value="0" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                        <div class="md:col-span-full">
-                            <label for="dept-description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional):</label>
-                            <textarea id="dept-description" name="description" rows="2" placeholder="Brief description..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
-                        </div>
-                    </div>
-                     <div class="pt-2 space-x-3">
-                        <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                            Add Entry
-                        </button>
-                    </div>
-                 </form>
-            </div>
-
-            <div>
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Organizational Structure</h3>
-                <div id="org-structure-display-container" class="space-y-4">
-                     <p class="text-center py-4">Loading structure...</p>
+                     </form>
                 </div>
-            </div>
-        </div>
-    `;
++
++
++                <div>
++                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Organizational Structure</h3>
++                    <div id="org-structure-display-container" class="space-y-4">
++                         <p class="text-center py-4">Loading structure...</p>
++                    </div>
++                </div>
++            </div>
++        </div>
++    `;
     
     requestAnimationFrame(async () => {
         await populateEmployeeDropdown('dept-manager-select', true);

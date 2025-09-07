@@ -114,29 +114,36 @@ export async function displayHmoBenefitsSection() {
         return;
     }
     container.innerHTML = '';
+    // Centered wrapper for consistent dashboard theming
+    const wrapper = createEl('div', { class: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6' });
+    const inner = createEl('div', { class: 'bg-white p-4 rounded-lg shadow-sm' });
+
     const header = createEl('div', { class: 'flex items-center justify-between mb-4' });
     header.appendChild(createEl('h3', { class: 'text-xl font-semibold' }, 'HMO & Benefits'));
     const addBtn = createEl('button', { class: 'px-3 py-2 bg-green-600 text-white rounded' }, 'Add HMO/Benefit');
     header.appendChild(addBtn);
-    container.appendChild(header);
+    inner.appendChild(header);
 
     addBtn.addEventListener('click', () => {
         const form = createForm(async (payload) => {
             await addHmoBenefit(payload);
         });
-        container.innerHTML = '';
-        container.appendChild(createEl('h3', { class: 'text-xl font-semibold mb-2' }, 'Add HMO/Benefit'));
-        container.appendChild(form);
+        inner.innerHTML = '';
+        inner.appendChild(createEl('h3', { class: 'text-xl font-semibold mb-2' }, 'Add HMO/Benefit'));
+        inner.appendChild(form);
     });
 
     try {
         const res = await fetchHmoBenefits();
         const rows = res.HMO_Benefits || res.hmo_benefits || res.data || [];
-        container.appendChild(renderTable(rows));
+        inner.appendChild(renderTable(rows));
     } catch (err) {
         console.error('Failed to load HMO benefits', err);
-        container.appendChild(createEl('p', { class: 'text-red-500' }, 'Failed to load HMO/Benefits.'));
+        inner.appendChild(createEl('p', { class: 'text-red-500' }, 'Failed to load HMO/Benefits.'));
     }
+
+    wrapper.appendChild(inner);
+    container.appendChild(wrapper);
 }
 
 // end of file

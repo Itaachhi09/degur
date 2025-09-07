@@ -37,47 +37,50 @@ export async function displayCompensationPlansSection() {
 
     pageTitleElement.textContent = 'Manage Compensation Plans';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                 <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Add New Compensation Plan</h3>
-                 <form id="add-comp-plan-form" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div>
-                            <label for="comp-plan-name" class="block text-sm font-medium text-gray-700 mb-1">Plan Name:</label>
-                            <input type="text" id="comp-plan-name" name="plan_name" required placeholder="e.g., 2025 Salary Structure" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                     <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Add New Compensation Plan</h3>
+                     <form id="add-comp-plan-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label for="comp-plan-name" class="block text-sm font-medium text-gray-700 mb-1">Plan Name:</label>
+                                <input type="text" id="comp-plan-name" name="plan_name" required placeholder="e.g., 2025 Salary Structure" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                             <div>
+                                <label for="comp-plan-type" class="block text-sm font-medium text-gray-700 mb-1">Plan Type:</label>
+                                <input type="text" id="comp-plan-type" name="plan_type" placeholder="e.g., Salary, Bonus, Commission" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div>
+                                <label for="comp-plan-effective-date" class="block text-sm font-medium text-gray-700 mb-1">Effective Date:</label>
+                                <input type="date" id="comp-plan-effective-date" name="effective_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div>
+                                <label for="comp-plan-end-date" class="block text-sm font-medium text-gray-700 mb-1">End Date (Optional):</label>
+                                <input type="date" id="comp-plan-end-date" name="end_date" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div class="md:col-span-2 lg:col-span-3">
+                                <label for="comp-plan-description" class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
+                                <textarea id="comp-plan-description" name="description" rows="2" placeholder="Details about this compensation plan..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
+                            </div>
                         </div>
-                         <div>
-                            <label for="comp-plan-type" class="block text-sm font-medium text-gray-700 mb-1">Plan Type:</label>
-                            <input type="text" id="comp-plan-type" name="plan_type" placeholder="e.g., Salary, Bonus, Commission" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                        <div>
-                            <label for="comp-plan-effective-date" class="block text-sm font-medium text-gray-700 mb-1">Effective Date:</label>
-                            <input type="date" id="comp-plan-effective-date" name="effective_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                        <div>
-                            <label for="comp-plan-end-date" class="block text-sm font-medium text-gray-700 mb-1">End Date (Optional):</label>
-                            <input type="date" id="comp-plan-end-date" name="end_date" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                        <div class="md:col-span-2 lg:col-span-3">
-                            <label for="comp-plan-description" class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
-                            <textarea id="comp-plan-description" name="description" rows="2" placeholder="Details about this compensation plan..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
-                        </div>
-                    </div>
-                     <div class="pt-2 space-x-3">
-                        <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                            Save Compensation Plan
-                        </button>
-                        </div>
-                 </form>
-            </div>
-
-            <div>
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Existing Compensation Plans</h3>
-                <div id="comp-plans-list-container" class="overflow-x-auto">
-                     <p class="text-center py-4">Loading compensation plans...</p>
+                         <div class="pt-2 space-x-3">
+                            <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                                Save Compensation Plan
+                            </button>
+                            </div>
+                     </form>
                 </div>
-            </div>
-        </div>`;
++
++
++                <div>
++                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Existing Compensation Plans</h3>
++                    <div id="comp-plans-list-container" class="overflow-x-auto">
++                         <p class="text-center py-4">Loading compensation plans...</p>
++                    </div>
++                </div>
++            </div>
++        </div>`;
 
     requestAnimationFrame(async () => {
         const compPlanForm = document.getElementById('add-comp-plan-form');

@@ -21,7 +21,8 @@ export async function displayDeductionsSection() {
 
     // Inject HTML structure
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
             <div class="border-b border-gray-200 pb-4">
                 <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Add New Deduction Record</h3>
                 <form id="add-deduction-form" class="space-y-4">
@@ -80,6 +81,7 @@ export async function displayDeductionsSection() {
                 <div id="deductions-list-container" class="overflow-x-auto">
                     <p>Loading deductions...</p>
                 </div>
+            </div>
             </div>
         </div>`;
 

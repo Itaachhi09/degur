@@ -22,55 +22,59 @@ export async function displayDocumentsSection() {
 
     pageTitleElement.textContent = 'Employee Documents';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Upload New Document</h3>
-                <form id="upload-document-form" class="space-y-4" enctype="multipart/form-data">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label for="doc-employee-select" class="block text-sm font-medium text-gray-700 mb-1">Employee:</label>
-                            <select id="doc-employee-select" name="employee_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                <option value="">Loading employees...</option>
-                            </select>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Upload New Document</h3>
+                    <form id="upload-document-form" class="space-y-4" enctype="multipart/form-data">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="doc-employee-select" class="block text-sm font-medium text-gray-700 mb-1">Employee:</label>
+                                <select id="doc-employee-select" name="employee_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                    <option value="">Loading employees...</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="doc-type" class="block text-sm font-medium text-gray-700 mb-1">Document Type:</label>
+                                <input type="text" id="doc-type" name="document_type" required placeholder="e.g., Contract, ID, Certificate" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div>
+                                <label for="doc-file" class="block text-sm font-medium text-gray-700 mb-1">File:</label>
+                                <input type="file" id="doc-file" name="document_file" required class="w-full p-1.5 border border-gray-300 rounded-md shadow-sm text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#F7E6CA] file:text-[#4E3B2A] hover:file:bg-[#EADDCB]">
+                                <p class="mt-1 text-xs text-gray-500">Allowed: PDF, DOC, DOCX, JPG, PNG (Max 5MB)</p>
+                            </div>
                         </div>
-                        <div>
-                            <label for="doc-type" class="block text-sm font-medium text-gray-700 mb-1">Document Type:</label>
-                            <input type="text" id="doc-type" name="document_type" required placeholder="e.g., Contract, ID, Certificate" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                        <div>
-                            <label for="doc-file" class="block text-sm font-medium text-gray-700 mb-1">File:</label>
-                            <input type="file" id="doc-file" name="document_file" required class="w-full p-1.5 border border-gray-300 rounded-md shadow-sm text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#F7E6CA] file:text-[#4E3B2A] hover:file:bg-[#EADDCB]">
-                            <p class="mt-1 text-xs text-gray-500">Allowed: PDF, DOC, DOCX, JPG, PNG (Max 5MB)</p>
-                        </div>
-                    </div>
-                    <div class="pt-2">
-                        <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                            Upload Document
-                        </button>
-                        </div>
-                </form>
-            </div>
-
-            <div>
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Existing Documents</h3>
-                <div class="flex flex-wrap gap-4 mb-4 items-end">
-                     <div>
-                       <label for="filter-doc-employee" class="block text-sm font-medium text-gray-700 mb-1">Filter by Employee:</label>
-                       <select id="filter-doc-employee" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                           <option value="">All Employees</option>
-                           </select>
-                    </div>
-                    <div>
-                       <button id="filter-doc-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                           Filter
-                       </button>
-                    </div>
+                        <div class="pt-2">
+                            <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                                Upload Document
+                            </button>
+                            </div>
+                    </form>
                 </div>
-                <div id="documents-list-container" class="overflow-x-auto">
-                    <p class="text-center py-4">Loading documents...</p> 
-                </div>
-            </div>
-        </div>`;
++
++
++                <div>
++                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Existing Documents</h3>
++                    <div class="flex flex-wrap gap-4 mb-4 items-end">
++                         <div>
++                           <label for="filter-doc-employee" class="block text-sm font-medium text-gray-700 mb-1">Filter by Employee:</label>
++                           <select id="filter-doc-employee" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
++                               <option value="">All Employees</option>
++                               </select>
++                        </div>
++                        <div>
++                           <button id="filter-doc-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
++                               Filter
++                           </button>
++                        </div>
++                    </div>
++                    <div id="documents-list-container" class="overflow-x-auto">
++                        <p class="text-center py-4">Loading documents...</p> 
++
++                    </div>
++                </div>
++            </div>
++        </div>`;
 
     requestAnimationFrame(async () => {
         await populateEmployeeDropdown('doc-employee-select'); 

@@ -16,7 +16,8 @@ export async function displayBonusesSection() {
 
     // Inject HTML structure for the bonuses section
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
             <div class="border-b border-gray-200 pb-4">
                 <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Add New Bonus</h3>
                 <form id="add-bonus-form" class="space-y-4">
@@ -70,6 +71,7 @@ export async function displayBonusesSection() {
                 <div id="bonuses-list-container" class="overflow-x-auto">
                     <p>Loading bonuses...</p>
                 </div>
+            </div>
             </div>
         </div>`;
 

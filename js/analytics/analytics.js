@@ -33,7 +33,8 @@ export async function displayAnalyticsDashboardsSection() {
     if (!initializeAnalyticsElements()) return;
     pageTitleElement.textContent = 'HR Analytics Dashboard';
     mainContentArea.innerHTML = `
-        <div class="space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="bg-gradient-to-br from-blue-400 to-blue-600 p-6 rounded-xl shadow-lg text-white"><div class="flex items-center justify-between"><div><p class="text-sm font-medium uppercase tracking-wider">Total Active Employees</p><p class="text-3xl font-bold" id="kpi-total-employees">Loading...</p></div><div class="bg-white/20 p-3 rounded-full"><i class="fas fa-users fa-lg text-white"></i></div></div></div>
                 <div class="bg-gradient-to-br from-green-400 to-green-600 p-6 rounded-xl shadow-lg text-white"><div class="flex items-center justify-between"><div><p class="text-sm font-medium uppercase tracking-wider">Approved Leave Days (This Year)</p><p class="text-3xl font-bold" id="kpi-total-leave-days">Loading...</p></div><div class="bg-white/20 p-3 rounded-full"><i class="fas fa-calendar-check fa-lg text-white"></i></div></div></div>
@@ -124,14 +125,16 @@ export async function displayAnalyticsReportsSection() {
     if (!initializeAnalyticsElements()) return;
     pageTitleElement.textContent = 'Analytics Reports';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <h3 class="text-lg font-semibold text-[#4E3B2A] mb-4 font-header">Generate & View Reports</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-4 border-b border-gray-200 items-end">
-                <div><label for="report-type-filter" class="block text-sm font-medium text-gray-700 mb-1">Report Type:</label><select id="report-type-filter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"><option value="">-- Select Report --</option></select></div>
-                <div><label for="report-date-range-filter" class="block text-sm font-medium text-gray-700 mb-1">Date Range (YYYY-MM-DD_YYYY-MM-DD):</label><input type="text" id="report-date-range-filter" placeholder="e.g., 2025-01-01_2025-03-31" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></div>
-                <div><button id="generate-report-btn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Generate Report</button></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-4 font-header">Generate & View Reports</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-4 border-b border-gray-200 items-end">
+                    <div><label for="report-type-filter" class="block text-sm font-medium text-gray-700 mb-1">Report Type:</label><select id="report-type-filter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"><option value="">-- Select Report --</option></select></div>
+                    <div><label for="report-date-range-filter" class="block text-sm font-medium text-gray-700 mb-1">Date Range (YYYY-MM-DD_YYYY-MM-DD):</label><input type="text" id="report-date-range-filter" placeholder="e.g., 2025-01-01_2025-03-31" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></div>
+                    <div><button id="generate-report-btn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Generate Report</button></div>
+                </div>
+                <div id="reports-output-container" class="overflow-x-auto min-h-[200px] bg-gray-50 p-4 rounded-lg border"><p class="text-center py-4 text-gray-500">Select a report type and click "Generate Report".</p></div>
             </div>
-            <div id="reports-output-container" class="overflow-x-auto min-h-[200px] bg-gray-50 p-4 rounded-lg border"><p class="text-center py-4 text-gray-500">Select a report type and click "Generate Report".</p></div>
         </div>`;
     await loadAvailableReportsDropdown(); 
     const btn = document.getElementById('generate-report-btn');
@@ -252,14 +255,16 @@ export async function displayAnalyticsMetricsSection() {
     if (!initializeAnalyticsElements()) return;
     pageTitleElement.textContent = 'Key HR Metrics Tracking';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <h3 class="text-lg font-semibold text-[#4E3B2A] mb-4 font-header">Track Key Performance Indicators</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-4 border-b border-gray-200 items-end">
-                <div><label for="metric-name-filter" class="block text-sm font-medium text-gray-700 mb-1">Metric:</label><select id="metric-name-filter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"><option value="">-- Select Metric --</option><option value="headcount_by_department">Headcount by Department</option><option value="turnover_rate">Employee Turnover Rate</option><option value="avg_time_to_hire">Average Time to Hire</option><option value="training_completion_rate">Training Completion Rate</option></select></div>
-                <div><label for="metric-period-filter" class="block text-sm font-medium text-gray-700 mb-1">Time Period:</label><select id="metric-period-filter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"><option value="current">Current Snapshot</option><option value="monthly">Monthly Trend</option><option value="quarterly">Quarterly Trend</option><option value="annual">Annual Trend</option></select></div>
-                <div><button id="view-metric-btn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">View Metric</button></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-4 font-header">Track Key Performance Indicators</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 pb-4 border-b border-gray-200 items-end">
+                    <div><label for="metric-name-filter" class="block text-sm font-medium text-gray-700 mb-1">Metric:</label><select id="metric-name-filter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"><option value="">-- Select Metric --</option><option value="headcount_by_department">Headcount by Department</option><option value="turnover_rate">Employee Turnover Rate</option><option value="avg_time_to_hire">Average Time to Hire</option><option value="training_completion_rate">Training Completion Rate</option></select></div>
+                    <div><label for="metric-period-filter" class="block text-sm font-medium text-gray-700 mb-1">Time Period:</label><select id="metric-period-filter" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"><option value="current">Current Snapshot</option><option value="monthly">Monthly Trend</option><option value="quarterly">Quarterly Trend</option><option value="annual">Annual Trend</option></select></div>
+                    <div><button id="view-metric-btn" class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">View Metric</button></div>
+                </div>
+                <div id="metric-display-area" class="min-h-[300px] bg-gray-50 p-4 rounded-lg border"><p class="text-center py-4 text-gray-500">Select a metric and period to view data.</p></div>
             </div>
-            <div id="metric-display-area" class="min-h-[300px] bg-gray-50 p-4 rounded-lg border"><p class="text-center py-4 text-gray-500">Select a metric and period to view data.</p></div>
         </div>`;
     const btn = document.getElementById('view-metric-btn');
     if (btn && !btn.hasAttribute('data-listener-attached')) {

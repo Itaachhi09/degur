@@ -2,6 +2,7 @@
  * Payroll - Payroll Runs Module
  */
 import { API_BASE_URL } from '../utils.js'; // Import base URL
+import apiClient from '../api_client.js';
 
 /**
  * Displays the Payroll Runs section.
@@ -16,39 +17,41 @@ export async function displayPayrollRunsSection() {
     }
     pageTitleElement.textContent = 'Payroll Runs';
 
-    // Inject HTML structure
+    // Inject HTML structure (wrapped in standardized container for consistent layout)
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Create New Payroll Run</h3>
-                <form id="create-payroll-run-form" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label for="pr-start-date" class="block text-sm font-medium text-gray-700 mb-1">Pay Period Start Date:</label>
-                            <input type="date" id="pr-start-date" name="pay_period_start_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Create New Payroll Run</h3>
+                    <form id="create-payroll-run-form" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="pr-start-date" class="block text-sm font-medium text-gray-700 mb-1">Pay Period Start Date:</label>
+                                <input type="date" id="pr-start-date" name="pay_period_start_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div>
+                                <label for="pr-end-date" class="block text-sm font-medium text-gray-700 mb-1">Pay Period End Date:</label>
+                                <input type="date" id="pr-end-date" name="pay_period_end_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                            <div>
+                                <label for="pr-payment-date" class="block text-sm font-medium text-gray-700 mb-1">Payment Date:</label>
+                                <input type="date" id="pr-payment-date" name="payment_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
                         </div>
-                        <div>
-                            <label for="pr-end-date" class="block text-sm font-medium text-gray-700 mb-1">Pay Period End Date:</label>
-                            <input type="date" id="pr-end-date" name="pay_period_end_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                        <div class="pt-2">
+                            <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                                Create Payroll Run
+                            </button>
+                            <span id="create-pr-status" class="ml-4 text-sm"></span>
                         </div>
-                        <div>
-                            <label for="pr-payment-date" class="block text-sm font-medium text-gray-700 mb-1">Payment Date:</label>
-                            <input type="date" id="pr-payment-date" name="payment_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        </div>
-                    </div>
-                    <div class="pt-2">
-                        <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                            Create Payroll Run
-                        </button>
-                        <span id="create-pr-status" class="ml-4 text-sm"></span>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
 
-            <div>
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Payroll Run History</h3>
-                 <div id="payroll-runs-list-container" class="overflow-x-auto">
-                    <p>Loading payroll runs...</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Payroll Run History</h3>
+                    <div id="payroll-runs-list-container" class="overflow-x-auto">
+                        <p>Loading payroll runs...</p>
+                    </div>
                 </div>
             </div>
         </div>`;
@@ -76,22 +79,12 @@ async function loadPayrollRuns() {
     if (!container) return;
     container.innerHTML = '<p class="text-center py-4">Loading payroll runs...</p>';
 
-    const url = `${API_BASE_URL}get_payroll_runs.php`; // Add filters if needed
-
     try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const payrollRuns = await response.json();
-
-        if (payrollRuns.error) {
-            console.error("Error fetching payroll runs:", payrollRuns.error);
-            container.innerHTML = `<p class="text-red-500 text-center py-4">Error: ${payrollRuns.error}</p>`;
-        } else {
-            renderPayrollRunsTable(payrollRuns);
-        }
+        const payrollRuns = await apiClient.apiFetch('payroll', { method: 'GET', requireAuth: true });
+        renderPayrollRunsTable(payrollRuns);
     } catch (error) {
         console.error('Error loading payroll runs:', error);
-        container.innerHTML = `<p class="text-red-500 text-center py-4">Could not load payroll runs. ${error.message}</p>`;
+        container.innerHTML = `<p class="text-red-500 text-center py-4">Could not load payroll runs. ${error.message || error.error || ''}</p>`;
     }
 }
 
@@ -232,28 +225,12 @@ async function handleCreatePayrollRun(event) {
     submitButton.disabled = true;
 
     try {
-        const response = await fetch(`${API_BASE_URL}create_payroll_run.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            if (response.status === 400 && result.details) {
-                const errorMessages = Object.values(result.details).join(' ');
-                throw new Error(errorMessages || result.error || `HTTP error! status: ${response.status}`);
-            }
-            throw new Error(result.error || `HTTP error! status: ${response.status}`);
-        }
-
-        statusSpan.textContent = result.message || 'Payroll run created successfully!';
-        statusSpan.className = 'ml-4 text-sm text-green-600';
-        form.reset(); // Clear the form
-        await loadPayrollRuns(); // Refresh the list
-
-        setTimeout(() => { if(statusSpan.textContent === (result.message || 'Payroll run created successfully!')) statusSpan.textContent = ''; }, 5000);
+    const result = await apiClient.apiFetch('payroll', { method: 'POST', body: { start_date: startDate, end_date: endDate, payment_date: paymentDate }, requireAuth: true });
+    statusSpan.textContent = result.message || 'Payroll run created successfully!';
+    statusSpan.className = 'ml-4 text-sm text-green-600';
+    form.reset();
+    await loadPayrollRuns();
+    setTimeout(() => { if(statusSpan.textContent === (result.message || 'Payroll run created successfully!')) statusSpan.textContent = ''; }, 5000);
 
     } catch (error) {
         console.error('Error creating payroll run:', error);
@@ -286,20 +263,8 @@ async function processPayrollRun(payrollId) {
 
     try {
         // This endpoint would handle the complex logic server-side
-        const response = await fetch(`${API_BASE_URL}process_payroll_run.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ payroll_id: parseInt(payrollId) })
-        });
-
-        const result = await response.json(); // Expecting JSON response
-
-        if (!response.ok) {
-            throw new Error(result.error || `Processing failed with status: ${response.status}`);
-        }
-
-        // Success
-        const message = result.message || `Payroll Run ${payrollId} processed successfully.`;
+    const result = await apiClient.apiFetch(`payroll/${payrollId}`, { method: 'PUT', body: { Status: 'Processing' }, requireAuth: true });
+    const message = result.message || `Payroll Run ${payrollId} processed successfully.`;
          if(statusSpan) {
             statusSpan.textContent = message;
             statusSpan.className = 'ml-4 text-sm text-green-600';

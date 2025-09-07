@@ -55,22 +55,24 @@ export async function displayPayslipsSection() {
         </div>` : '';
 
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Payslip History</h3>
-            <div class="flex flex-wrap gap-4 mb-4 items-end">
-                ${employeeFilterHtml}
-                <div>
-                    <label for="filter-payslip-payroll-id" class="block text-sm font-medium text-gray-700 mb-1">Filter by Payroll Run ID:</label>
-                    <input type="number" id="filter-payslip-payroll-id" placeholder="Enter Payroll ID" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Payslip History</h3>
+                <div class="flex flex-wrap gap-4 mb-4 items-end">
+                    ${employeeFilterHtml}
+                    <div>
+                        <label for="filter-payslip-payroll-id" class="block text-sm font-medium text-gray-700 mb-1">Filter by Payroll Run ID:</label>
+                        <input type="number" id="filter-payslip-payroll-id" placeholder="Enter Payroll ID" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                    </div>
+                    <div>
+                        <button id="filter-payslip-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                            Filter Payslips
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <button id="filter-payslip-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                        Filter Payslips
-                    </button>
+                <div id="payslips-list-container" class="overflow-x-auto">
+                    <p class="text-center py-4">Loading payslips...</p>
                 </div>
-            </div>
-            <div id="payslips-list-container" class="overflow-x-auto">
-                <p class="text-center py-4">Loading payslips...</p>
             </div>
         </div>
         `; // Modal HTML removed from here

@@ -123,145 +123,147 @@ export async function displayUserManagementSection() {
 
     pageTitleElement.textContent = 'User & Employee Management';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                 <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3"><span id="user-form-title">Add New Employee & User</span></h3>
-                 <form id="add-edit-user-form" class="space-y-4">
-                    <input type="hidden" id="editing-employee-id" name="editing_employee_id" value="">
-                    <input type="hidden" id="editing-user-id" name="editing_user_id" value="">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                     <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3"><span id="user-form-title">Add New Employee & User</span></h3>
+                     <form id="add-edit-user-form" class="space-y-4">
+                        <input type="hidden" id="editing-employee-id" name="editing_employee_id" value="">
+                        <input type="hidden" id="editing-user-id" name="editing_user_id" value="">
 
-                    <div id="employee-info-section" class="space-y-4 border-b border-dashed border-gray-300 pb-4 mb-4">
-                        <h4 class="text-md font-semibold text-gray-700">Employee Information</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div>
-                                <label for="emp-first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name:</label>
-                                <input type="text" id="emp-first-name" name="first_name" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="emp-middle-name" class="block text-sm font-medium text-gray-700 mb-1">Middle Name (Optional):</label>
-                                <input type="text" id="emp-middle-name" name="middle_name" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="emp-last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name:</label>
-                                <input type="text" id="emp-last-name" name="last_name" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                             <div>
-                                <label for="emp-suffix" class="block text-sm font-medium text-gray-700 mb-1">Suffix (Optional):</label>
-                                <input type="text" id="emp-suffix" name="suffix" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="emp-email" class="block text-sm font-medium text-gray-700 mb-1">Work Email:</label>
-                                <input type="email" id="emp-email" name="email" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="emp-personal-email" class="block text-sm font-medium text-gray-700 mb-1">Personal Email (Optional):</label>
-                                <input type="email" id="emp-personal-email" name="personal_email" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="emp-phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number (Optional):</label>
-                                <input type="tel" id="emp-phone" name="phone_number" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                             <div>
-                                <label for="emp-dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth (Optional):</label>
-                                <input type="date" id="emp-dob" name="date_of_birth" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="emp-gender" class="block text-sm font-medium text-gray-700 mb-1">Gender (Optional):</label>
-                                <select id="emp-gender" name="gender" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                    <option value="">-- Select --</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                    <option value="Prefer not to say">Prefer not to say</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="emp-marital-status" class="block text-sm font-medium text-gray-700 mb-1">Marital Status (Optional):</label>
-                                <select id="emp-marital-status" name="marital_status" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                    <option value="">-- Select --</option>
-                                    <option value="Single">Single</option>
-                                    <option value="Married">Married</option>
-                                    <option value="Widowed">Widowed</option>
-                                    <option value="Divorced">Divorced</option>
-                                    <option value="Separated">Separated</option>
-                                </select>
-                            </div>
-                             <div>
-                                <label for="emp-nationality" class="block text-sm font-medium text-gray-700 mb-1">Nationality (Optional):</label>
-                                <input type="text" id="emp-nationality" name="nationality" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div class="md:col-span-1 lg:col-span-1">
-                                <label for="emp-job-title" class="block text-sm font-medium text-gray-700 mb-1">Job Title:</label>
-                                <input type="text" id="emp-job-title" name="job_title" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div class="md:col-span-1 lg:col-span-1">
-                                <label for="emp-department-select" class="block text-sm font-medium text-gray-700 mb-1">Department:</label>
-                                <select id="emp-department-select" name="department_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                    <option value="">Loading departments...</option>
-                                </select>
-                            </div>
-                             <div class="md:col-span-1 lg:col-span-1">
-                                <label for="emp-manager-select" class="block text-sm font-medium text-gray-700 mb-1">Direct Manager (Optional):</label>
-                                <select id="emp-manager-select" name="manager_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                    <option value="">Loading managers...</option>
-                                </select>
-                            </div>
-                             <div>
-                                <label for="emp-hire-date" class="block text-sm font-medium text-gray-700 mb-1">Hire Date:</label>
-                                <input type="date" id="emp-hire-date" name="hire_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                             <div class="flex items-center pt-6 md:col-span-1 lg:col-span-1" id="employee-active-status-section">
-                                <input id="emp-is-active" name="is_active_employee" type="checkbox" value="1" checked class="h-4 w-4 text-[#594423] focus:ring-[#4E3B2A] border-gray-300 rounded">
-                                <label for="emp-is-active" class="ml-2 block text-sm text-gray-900">Employee Active?</label>
+                        <div id="employee-info-section" class="space-y-4 border-b border-dashed border-gray-300 pb-4 mb-4">
+                            <h4 class="text-md font-semibold text-gray-700">Employee Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="emp-first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name:</label>
+                                    <input type="text" id="emp-first-name" name="first_name" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="emp-middle-name" class="block text-sm font-medium text-gray-700 mb-1">Middle Name (Optional):</label>
+                                    <input type="text" id="emp-middle-name" name="middle_name" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="emp-last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name:</label>
+                                    <input type="text" id="emp-last-name" name="last_name" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                 <div>
+                                    <label for="emp-suffix" class="block text-sm font-medium text-gray-700 mb-1">Suffix (Optional):</label>
+                                    <input type="text" id="emp-suffix" name="suffix" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="emp-email" class="block text-sm font-medium text-gray-700 mb-1">Work Email:</label>
+                                    <input type="email" id="emp-email" name="email" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="emp-personal-email" class="block text-sm font-medium text-gray-700 mb-1">Personal Email (Optional):</label>
+                                    <input type="email" id="emp-personal-email" name="personal_email" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="emp-phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number (Optional):</label>
+                                    <input type="tel" id="emp-phone" name="phone_number" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                 <div>
+                                    <label for="emp-dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth (Optional):</label>
+                                    <input type="date" id="emp-dob" name="date_of_birth" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="emp-gender" class="block text-sm font-medium text-gray-700 mb-1">Gender (Optional):</label>
+                                    <select id="emp-gender" name="gender" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                        <option value="">-- Select --</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                        <option value="Prefer not to say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="emp-marital-status" class="block text-sm font-medium text-gray-700 mb-1">Marital Status (Optional):</label>
+                                    <select id="emp-marital-status" name="marital_status" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                        <option value="">-- Select --</option>
+                                        <option value="Single">Single</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Widowed">Widowed</option>
+                                        <option value="Divorced">Divorced</option>
+                                        <option value="Separated">Separated</option>
+                                    </select>
+                                </div>
+                                 <div>
+                                    <label for="emp-nationality" class="block text-sm font-medium text-gray-700 mb-1">Nationality (Optional):</label>
+                                    <input type="text" id="emp-nationality" name="nationality" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div class="md:col-span-1 lg:col-span-1">
+                                    <label for="emp-job-title" class="block text-sm font-medium text-gray-700 mb-1">Job Title:</label>
+                                    <input type="text" id="emp-job-title" name="job_title" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div class="md:col-span-1 lg:col-span-1">
+                                    <label for="emp-department-select" class="block text-sm font-medium text-gray-700 mb-1">Department:</label>
+                                    <select id="emp-department-select" name="department_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                        <option value="">Loading departments...</option>
+                                    </select>
+                                </div>
+                                 <div class="md:col-span-1 lg:col-span-1">
+                                    <label for="emp-manager-select" class="block text-sm font-medium text-gray-700 mb-1">Direct Manager (Optional):</label>
+                                    <select id="emp-manager-select" name="manager_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                        <option value="">Loading managers...</option>
+                                    </select>
+                                </div>
+                                 <div>
+                                    <label for="emp-hire-date" class="block text-sm font-medium text-gray-700 mb-1">Hire Date:</label>
+                                    <input type="date" id="emp-hire-date" name="hire_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                 <div class="flex items-center pt-6 md:col-span-1 lg:col-span-1" id="employee-active-status-section">
+                                    <input id="emp-is-active" name="is_active_employee" type="checkbox" value="1" checked class="h-4 w-4 text-[#594423] focus:ring-[#4E3B2A] border-gray-300 rounded">
+                                    <label for="emp-is-active" class="ml-2 block text-sm text-gray-900">Employee Active?</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div id="user-account-section" class="space-y-4">
-                        <h4 class="text-md font-semibold text-gray-700 pt-2">User Account Information</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <div id="user-employee-select-container" style="display:none;">
-                                <label for="user-employee-select" class="block text-sm font-medium text-gray-700 mb-1">Link to Existing Employee:</label>
-                                <select id="user-employee-select" name="employee_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                    <option value="">Loading employees...</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="user-username" class="block text-sm font-medium text-gray-700 mb-1">Username:</label>
-                                <input type="text" id="user-username" name="username" required placeholder="e.g., jdelacruz" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div>
-                                <label for="user-role-select" class="block text-sm font-medium text-gray-700 mb-1">Role:</label>
-                                <select id="user-role-select" name="role_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                                    <option value="">Loading roles...</option>
-                                </select>
-                            </div>
-                            <div id="password-section">
-                                <label for="user-password" class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
-                                <input type="password" id="user-password" name="password" required placeholder="Enter initial password" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            </div>
-                            <div class="flex items-center pt-6 md:col-span-1 lg:col-span-1" id="user-active-status-section">
-                                <input id="user-is-active" name="is_active_user" type="checkbox" value="1" checked class="h-4 w-4 text-[#594423] focus:ring-[#4E3B2A] border-gray-300 rounded">
-                                <label for="user-is-active" class="ml-2 block text-sm text-gray-900">User Account Active?</label>
+                        <div id="user-account-section" class="space-y-4">
+                            <h4 class="text-md font-semibold text-gray-700 pt-2">User Account Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div id="user-employee-select-container" style="display:none;">
+                                    <label for="user-employee-select" class="block text-sm font-medium text-gray-700 mb-1">Link to Existing Employee:</label>
+                                    <select id="user-employee-select" name="employee_id" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                        <option value="">Loading employees...</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="user-username" class="block text-sm font-medium text-gray-700 mb-1">Username:</label>
+                                    <input type="text" id="user-username" name="username" required placeholder="e.g., jdelacruz" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div>
+                                    <label for="user-role-select" class="block text-sm font-medium text-gray-700 mb-1">Role:</label>
+                                    <select id="user-role-select" name="role_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                        <option value="">Loading roles...</option>
+                                    </select>
+                                </div>
+                                <div id="password-section">
+                                    <label for="user-password" class="block text-sm font-medium text-gray-700 mb-1">Password:</label>
+                                    <input type="password" id="user-password" name="password" required placeholder="Enter initial password" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                </div>
+                                <div class="flex items-center pt-6 md:col-span-1 lg:col-span-1" id="user-active-status-section">
+                                    <input id="user-is-active" name="is_active_user" type="checkbox" value="1" checked class="h-4 w-4 text-[#594423] focus:ring-[#4E3B2A] border-gray-300 rounded">
+                                    <label for="user-is-active" class="ml-2 block text-sm text-gray-900">User Account Active?</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                     <div class="pt-2 space-x-3">
-                        <button type="submit" id="save-form-button" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                            Save
-                        </button>
-                         <button type="button" id="cancel-edit-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out" style="display: none;">
-                            Cancel
-                        </button>
-                        <span id="add-edit-status" class="ml-4 text-sm"></span>
-                    </div>
-                 </form>
-            </div>
+                         <div class="pt-2 space-x-3">
+                            <button type="submit" id="save-form-button" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                                Save
+                            </button>
+                             <button type="button" id="cancel-edit-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out" style="display: none;">
+                                Cancel
+                            </button>
+                            <span id="add-edit-status" class="ml-4 text-sm"></span>
+                        </div>
+                     </form>
+                </div>
 
-            <div>
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Existing Users & Employees</h3>
-                <div id="users-list-container" class="overflow-x-auto">
-                     <p>Loading users...</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3">Existing Users & Employees</h3>
+                    <div id="users-list-container" class="overflow-x-auto">
+                         <p>Loading users...</p>
+                    </div>
                 </div>
             </div>
         </div>

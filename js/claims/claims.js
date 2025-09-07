@@ -38,53 +38,55 @@ export async function displaySubmitClaimSection() {
 
     pageTitleElement.textContent = 'Submit New Claim';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Claim Details</h3>
-            <form id="submit-claim-form" class="space-y-4" enctype="multipart/form-data">
-                ${isEmployeeRole && employeeId ? `
-                    <input type="hidden" name="employee_id" value="${employeeId}">
-                    <p class="text-sm mb-2">Submitting claim for: <strong>${user.full_name || 'Yourself'}</strong></p>
-                ` : `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="claim-employee-select" class="block text-sm font-medium text-gray-700 mb-1">Employee (Claimant):</label>
-                        <select id="claim-employee-select" name="employee_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            <option value="">Loading employees...</option>
-                        </select>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Claim Details</h3>
+                <form id="submit-claim-form" class="space-y-4" enctype="multipart/form-data">
+                    ${isEmployeeRole && employeeId ? `
+                        <input type="hidden" name="employee_id" value="${employeeId}">
+                        <p class="text-sm mb-2">Submitting claim for: <strong>${user.full_name || 'Yourself'}</strong></p>
+                    ` : `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="claim-employee-select" class="block text-sm font-medium text-gray-700 mb-1">Employee (Claimant):</label>
+                            <select id="claim-employee-select" name="employee_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                <option value="">Loading employees...</option>
+                            </select>
+                        </div>
                     </div>
-                 </div>
-                `}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                        <label for="claim-type-select" class="block text-sm font-medium text-gray-700 mb-1">Claim Type:</label>
-                        <select id="claim-type-select" name="claim_type_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                            <option value="">Loading claim types...</option>
-                        </select>
+                    `}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="claim-type-select" class="block text-sm font-medium text-gray-700 mb-1">Claim Type:</label>
+                            <select id="claim-type-select" name="claim_type_id" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                                <option value="">Loading claim types...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="claim-date" class="block text-sm font-medium text-gray-700 mb-1">Date Expense Incurred:</label>
+                            <input type="date" id="claim-date" name="claim_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                        </div>
+                        <div>
+                            <label for="claim-amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (PHP):</label>
+                            <input type="number" id="claim-amount" name="amount" required step="0.01" min="0.01" placeholder="e.g., 1500.50" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="claim-description" class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
+                            <textarea id="claim-description" name="description" rows="3" placeholder="Describe the expense..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
+                        </div>
+                        <div>
+                            <label for="claim-receipt" class="block text-sm font-medium text-gray-700 mb-1">Upload Receipt (Optional):</label>
+                            <input type="file" id="claim-receipt" name="receipt_file" class="w-full p-1.5 border border-gray-300 rounded-md shadow-sm text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#F7E6CA] file:text-[#4E3B2A] hover:file:bg-[#EADDCB]">
+                            <p class="mt-1 text-xs text-gray-500">Allowed: JPG, PNG, PDF (Max 2MB)</p>
+                        </div>
                     </div>
-                    <div>
-                        <label for="claim-date" class="block text-sm font-medium text-gray-700 mb-1">Date Expense Incurred:</label>
-                        <input type="date" id="claim-date" name="claim_date" required class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                    <div class="pt-2">
+                        <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                            Submit Claim
+                        </button>
                     </div>
-                    <div>
-                        <label for="claim-amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (PHP):</label>
-                        <input type="number" id="claim-amount" name="amount" required step="0.01" min="0.01" placeholder="e.g., 1500.50" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="claim-description" class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
-                        <textarea id="claim-description" name="description" rows="3" placeholder="Describe the expense..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
-                    </div>
-                    <div>
-                        <label for="claim-receipt" class="block text-sm font-medium text-gray-700 mb-1">Upload Receipt (Optional):</label>
-                        <input type="file" id="claim-receipt" name="receipt_file" class="w-full p-1.5 border border-gray-300 rounded-md shadow-sm text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#F7E6CA] file:text-[#4E3B2A] hover:file:bg-[#EADDCB]">
-                        <p class="mt-1 text-xs text-gray-500">Allowed: JPG, PNG, PDF (Max 2MB)</p>
-                    </div>
-                </div>
-                <div class="pt-2">
-                    <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                        Submit Claim
-                    </button>
-                    </div>
-            </form>
+                </form>
+            </div>
         </div>`;
 
     requestAnimationFrame(async () => {
@@ -110,18 +112,13 @@ async function populateClaimTypeDropdown(selectElementId) {
     selectElement.innerHTML = '<option value="" disabled selected>Loading claim types...</option>';
 
     try {
-        const response = await fetch(`${API_BASE_URL}get_claim_types.php`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const claimTypes = await response.json();
-
-        if (claimTypes.error) throw new Error(claimTypes.error);
-
+        const claimTypes = await apiClient.apiFetch('claims?type=types', { method: 'GET', requireAuth: false });
         selectElement.innerHTML = '<option value="">-- Select Claim Type --</option>';
-        if (claimTypes.length > 0) {
+        if (claimTypes && claimTypes.length) {
             claimTypes.forEach(type => {
                 const option = document.createElement('option');
-                option.value = type.ClaimTypeID;
-                option.textContent = type.TypeName;
+                option.value = type.ClaimTypeID ?? type.id ?? type.id;
+                option.textContent = type.TypeName ?? type.name ?? type.TypeName;
                 selectElement.appendChild(option);
             });
         } else {
@@ -133,7 +130,7 @@ async function populateClaimTypeDropdown(selectElementId) {
     }
 }
 async function handleSubmitClaim(event) {
-     event.preventDefault();
+    event.preventDefault();
     const form = event.target;
     const submitButton = form.querySelector('button[type="submit"]');
     if (!submitButton) return;
@@ -144,86 +141,41 @@ async function handleSubmitClaim(event) {
         title: 'Processing...',
         text: 'Submitting your claim, please wait.',
         allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
+        didOpen: () => { Swal.showLoading(); }
     });
     submitButton.disabled = true;
 
     try {
-        const response = await fetch(`${API_BASE_URL}submit_claim.php`, {
-            method: 'POST',
-            body: formData
-        });
-
-        const contentType = response.headers.get("content-type");
-        let result;
-
-        if (!response.ok) {
-            let errorPayload = { error: `HTTP error! Status: ${response.status}` };
-            if (contentType && contentType.includes("application/json")) {
-                try {
-                    result = await response.json();
-                    errorPayload.error = result.error || errorPayload.error;
-                    errorPayload.details = result.details;
-                } catch (jsonError) {
-                    console.error("Failed to parse JSON error response:", jsonError);
-                    errorPayload.error += " (Non-JSON error response received)";
-                }
-            } else {
-                const errorText = await response.text();
-                console.error("Non-JSON error response received:", errorText.substring(0, 500));
-                errorPayload.error = `Server returned non-JSON response (Status: ${response.status}). Check PHP logs.`;
-            }
-            const error = new Error(errorPayload.error);
-            error.details = errorPayload.details;
-            throw error;
-        }
-        try {
-            result = await response.json();
-        } catch (jsonError) {
-            console.error("Failed to parse successful JSON response:", jsonError);
-            throw new Error("Received successful status, but failed to parse JSON response.");
+        // If a file is attached, fallback to multipart upload using the legacy endpoint
+        if (form.querySelector('input[type=file]')?.files.length) {
+            const token = localStorage.getItem('jwt_token');
+            const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+            const response = await fetch(`${API_BASE_URL}submit_claim.php`, { method: 'POST', body: formData, headers });
+            if (!response.ok) throw new Error(`Server error: ${response.status}`);
+            var result = await response.json();
+        } else {
+            // No files — use the new REST endpoint via apiClient
+            const payload = Object.fromEntries(formData.entries());
+            const result = await apiClient.apiFetch('claims', { method: 'POST', body: payload, requireAuth: true });
         }
 
-        Swal.fire({
-            icon: 'success',
-            title: 'Claim Submitted!',
-            text: result.message || 'Your claim has been submitted successfully!',
-            confirmButtonColor: '#4E3B2A',
-            timer: 2500
-        });
+        Swal.fire({ icon: 'success', title: 'Claim Submitted!', text: (result && result.message) || 'Your claim has been submitted successfully!', confirmButtonColor: '#4E3B2A', timer: 2500 });
         form.reset();
 
-        // If the current user is an employee, refresh their "My Claims" view.
-        // This assumes that if they submit a claim, they are likely on the submit claim page,
-        // and then might want to see their claims list.
         if (window.currentUser?.role_name === 'Employee') {
-            // Check if the 'My Claims' section is currently active or if a function to load it exists
-            // This is a simplified check; a more robust solution might involve a global navigation state.
             if (typeof displayMyClaimsSection === 'function' && mainContentArea.querySelector('#my-claims-list-container')) {
-                 await loadMyClaims();
+                await loadMyClaims();
             }
         }
-
 
     } catch (error) {
         console.error('Error submitting claim:', error);
-        let displayMessage = `Error: ${error.message}`;
-        if (error.details) {
-             displayMessage += ` Details: ${JSON.stringify(error.details)}`;
-        }
-        Swal.fire({
-            icon: 'error',
-            title: 'Submission Error',
-            text: displayMessage,
-            confirmButtonColor: '#4E3B2A'
-        });
+        let displayMessage = `Error: ${error.message || error.error || 'Submission failed'}`;
+        if (error.details) displayMessage += ` Details: ${JSON.stringify(error.details)}`;
+        Swal.fire({ icon: 'error', title: 'Submission Error', text: displayMessage, confirmButtonColor: '#4E3B2A' });
     } finally {
         submitButton.disabled = false;
-        if (Swal.isLoading()) { // Ensure loading Swal is closed if it wasn't replaced
-            Swal.close();
-        }
+        if (Swal.isLoading()) Swal.close();
     }
 }
 
@@ -239,30 +191,32 @@ export async function displayMyClaimsSection() {
 
     pageTitleElement.textContent = 'My Submitted Claims';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Claim History</h3>
-            ${isEmployeeRole ? '' : `
-             <div class="flex flex-wrap gap-4 mb-4 items-end">
-                 <div>
-                    <label for="filter-myclaim-status" class="block text-sm font-medium text-gray-700 mb-1">Filter by Status:</label>
-                    <select id="filter-myclaim-status" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        <option value="">All Statuses</option>
-                        <option value="Submitted">Submitted</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Paid">Paid</option>
-                        <option value="Queried">Queried</option>
-                    </select>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Claim History</h3>
+                ${isEmployeeRole ? '' : `
+                 <div class="flex flex-wrap gap-4 mb-4 items-end">
+                     <div>
+                        <label for="filter-myclaim-status" class="block text-sm font-medium text-gray-700 mb-1">Filter by Status:</label>
+                        <select id="filter-myclaim-status" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            <option value="">All Statuses</option>
+                            <option value="Submitted">Submitted</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Queried">Queried</option>
+                        </select>
+                    </div>
+                     <div>
+                        <button id="filter-myclaim-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                            Filter
+                        </button>
+                     </div>
                 </div>
-                 <div>
-                    <button id="filter-myclaim-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                        Filter
-                    </button>
-                 </div>
-            </div>
-            `}
-            <div id="my-claims-list-container" class="overflow-x-auto">
-                <p>Loading claims...</p>
+                `}
+                <div id="my-claims-list-container" class="overflow-x-auto">
+                    <p>Loading claims...</p>
+                </div>
             </div>
         </div>`;
 
@@ -297,28 +251,16 @@ async function loadMyClaims(status = null) {
     }
     const employeeId = user.employee_id;
 
-    const params = new URLSearchParams();
-    params.append('employee_id', employeeId);
-     if (status) {
-        params.append('status', status);
-    }
-
-    const url = `${API_BASE_URL}get_claims.php?${params.toString()}`;
-
+    const query = [];
+    if (employeeId) query.push(`employee_id=${encodeURIComponent(employeeId)}`);
+    if (status) query.push(`status=${encodeURIComponent(status)}`);
+    const path = 'claims' + (query.length ? ('?' + query.join('&')) : '');
     try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const claims = await response.json();
-
-        if (claims.error) {
-            console.error("Error fetching claims:", claims.error);
-            container.innerHTML = `<p class="text-red-500 text-center py-4">Error: ${claims.error}</p>`;
-        } else {
-            renderMyClaimsTable(claims);
-        }
+        const claims = await apiClient.apiFetch(path, { method: 'GET', requireAuth: true });
+        renderMyClaimsTable(claims);
     } catch (error) {
         console.error('Error loading claims:', error);
-        container.innerHTML = `<p class="text-red-500 text-center py-4">Could not load claims. ${error.message}</p>`;
+        container.innerHTML = `<p class="text-red-500 text-center py-4">Could not load claims. ${error.message || error.error || ''}</p>`;
     }
 }
 function renderMyClaimsTable(claims) {
@@ -409,31 +351,35 @@ export async function displayClaimsApprovalSection() {
     if (user?.role_name === 'Employee') {
         pageTitleElement.textContent = 'Access Denied';
         mainContentArea.innerHTML = `
-            <div class="bg-white p-6 rounded-lg shadow-md border border-red-300">
-                <p class="text-red-600 font-semibold">Access Denied: You do not have permission to view the Claims Approval section.</p>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-red-300">
+                    <p class="text-red-600 font-semibold">Access Denied: You do not have permission to view the Claims Approval section.</p>
+                </div>
             </div>`;
         return;
     }
 
     pageTitleElement.textContent = 'Approve Claims';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Claims Pending Approval</h3>
-             <div class="flex flex-wrap gap-4 mb-4 items-end">
-                 <div>
-                    <label for="filter-approval-employee" class="block text-sm font-medium text-gray-700 mb-1">Filter by Employee:</label>
-                    <select id="filter-approval-employee" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
-                        <option value="">All Employees</option>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Claims Pending Approval</h3>
+                 <div class="flex flex-wrap gap-4 mb-4 items-end">
+                     <div>
+                        <label for="filter-approval-employee" class="block text-sm font-medium text-gray-700 mb-1">Filter by Employee:</label>
+                        <select id="filter-approval-employee" class="w-full sm:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            <option value="">All Employees</option>
                         </select>
+                    </div>
+                     <div>
+                        <button id="filter-approval-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                            Filter
+                        </button>
+                     </div>
                 </div>
-                 <div>
-                    <button id="filter-approval-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                        Filter
-                    </button>
-                 </div>
-            </div>
-            <div id="claims-approval-list-container" class="overflow-x-auto">
-                <p>Loading claims for approval...</p>
+                <div id="claims-approval-list-container" class="overflow-x-auto">
+                    <p>Loading claims for approval...</p>
+                </div>
             </div>
         </div>`;
 
@@ -461,28 +407,16 @@ async function loadClaimsForApproval(employeeId = null) {
     if (!container) return;
     container.innerHTML = '<p class="text-center py-4">Loading claims for approval...</p>';
 
-    const params = new URLSearchParams();
-    params.append('status', 'Submitted'); 
-    if (employeeId) {
-        params.append('employee_id', employeeId);
-    }
-
-    const url = `${API_BASE_URL}get_claims.php?${params.toString()}`;
-    
+    const q = [];
+    q.push('status=Submitted');
+    if (employeeId) q.push(`employee_id=${encodeURIComponent(employeeId)}`);
+    const path = 'claims?' + q.join('&');
     try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, Response: ${errorText}`);
-        }
-        const claims = await response.json();
-        if (claims.error) {
-            throw new Error(claims.error);
-        }
+        const claims = await apiClient.apiFetch(path, { method: 'GET', requireAuth: true });
         renderClaimsApprovalTable(claims);
     } catch (error) {
         console.error('[JS DEBUG] Error in loadClaimsForApproval:', error);
-        container.innerHTML = `<p class="text-red-500 text-center py-4">Could not load claims. ${error.message}</p>`;
+        container.innerHTML = `<p class="text-red-500 text-center py-4">Could not load claims. ${error.message || error.error || ''}</p>`;
     }
 }
 function renderClaimsApprovalTable(claims) {
@@ -720,48 +654,52 @@ export async function displayClaimTypesAdminSection() {
     if (user?.role_name === 'Employee' || user?.role_name === 'Manager') {
         pageTitleElement.textContent = 'Access Denied';
         mainContentArea.innerHTML = `
-            <div class="bg-white p-6 rounded-lg shadow-md border border-red-300">
-                <p class="text-red-600 font-semibold">Access Denied: You do not have permission to manage Claim Types.</p>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-red-300">
+                    <p class="text-red-600 font-semibold">Access Denied: You do not have permission to manage Claim Types.</p>
+                </div>
             </div>`;
         return;
     }
 
     pageTitleElement.textContent = 'Manage Claim Types';
     mainContentArea.innerHTML = `
-        <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
-            <div class="border-b border-gray-200 pb-4">
-                 <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header"><span id="claim-type-form-title">Add New</span> Claim Type</h3>
-                 <form id="add-edit-claim-type-form" class="space-y-4">
-                    <input type="hidden" id="claim-type-id" name="claim_type_id" value="">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="claim-type-name" class="block text-sm font-medium text-gray-700 mb-1">Type Name:</label>
-                            <input type="text" id="claim-type-name" name="type_name" required placeholder="e.g., Transportation" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="bg-white p-6 rounded-lg shadow-md border border-[#F7E6CA] space-y-6">
+                <div class="border-b border-gray-200 pb-4">
+                     <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header"><span id="claim-type-form-title">Add New</span> Claim Type</h3>
+                     <form id="add-edit-claim-type-form" class="space-y-4">
+                        <input type="hidden" id="claim-type-id" name="claim_type_id" value="">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="claim-type-name" class="block text-sm font-medium text-gray-700 mb-1">Type Name:</label>
+                                <input type="text" id="claim-type-name" name="type_name" required placeholder="e.g., Transportation" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]">
+                            </div>
+                             <div class="flex items-center pt-6">
+                                 <input id="claim-type-requires-receipt" name="requires_receipt" type="checkbox" value="1" class="h-4 w-4 text-[#594423] focus:ring-[#4E3B2A] border-gray-300 rounded">
+                                 <label for="claim-type-requires-receipt" class="ml-2 block text-sm text-gray-900">Requires Receipt?</label>
+                             </div>
+                             <div class="md:col-span-2">
+                                <label for="claim-type-description" class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
+                                <textarea id="claim-type-description" name="description" rows="2" placeholder="Details about this claim type..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
+                            </div>
                         </div>
-                         <div class="flex items-center pt-6">
-                             <input id="claim-type-requires-receipt" name="requires_receipt" type="checkbox" value="1" class="h-4 w-4 text-[#594423] focus:ring-[#4E3B2A] border-gray-300 rounded">
-                             <label for="claim-type-requires-receipt" class="ml-2 block text-sm text-gray-900">Requires Receipt?</label>
-                         </div>
-                         <div class="md:col-span-2">
-                            <label for="claim-type-description" class="block text-sm font-medium text-gray-700 mb-1">Description:</label>
-                            <textarea id="claim-type-description" name="description" rows="2" placeholder="Details about this claim type..." class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-[#4E3B2A] focus:border-[#4E3B2A]"></textarea>
-                        </div>
-                    </div>
-                     <div class="pt-2 space-x-3">
-                        <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
-                            Save Claim Type
-                        </button>
-                         <button type="button" id="cancel-edit-claim-type-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out" style="display: none;">
-                            Cancel Edit
-                        </button>
-                        </div>
-                 </form>
-            </div>
+                         <div class="pt-2 space-x-3">
+                            <button type="submit" class="px-4 py-2 bg-[#594423] text-white rounded-md hover:bg-[#4E3B2A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#594423] transition duration-150 ease-in-out">
+                                Save Claim Type
+                            </button>
+                             <button type="button" id="cancel-edit-claim-type-btn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out" style="display: none;">
+                                Cancel Edit
+                            </button>
+                            </div>
+                     </form>
+                </div>
 
-            <div>
-                <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Existing Claim Types</h3>
-                <div id="claim-types-admin-list-container" class="overflow-x-auto">
-                     <p>Loading claim types...</p>
+                <div>
+                    <h3 class="text-lg font-semibold text-[#4E3B2A] mb-3 font-header">Existing Claim Types</h3>
+                    <div id="claim-types-admin-list-container" class="overflow-x-auto">
+                         <p>Loading claim types...</p>
+                    </div>
                 </div>
             </div>
         </div>`;

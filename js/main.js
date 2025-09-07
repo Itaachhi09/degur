@@ -275,11 +275,20 @@ document.addEventListener('DOMContentLoaded', () => {
              addClickListenerOnce(sidebarItems.orgStructure.querySelector('a'), displayOrgStructureSection);
         }
     // Attendance and timesheets listeners removed (module deleted)
+        // Guarded: schedules/shifts modules may be removed in some deployments
         if (sidebarItems.schedules && !sidebarItems.schedules.classList.contains('hidden')) {
-             addClickListenerOnce(sidebarItems.schedules.querySelector('a'), displaySchedulesSection);
+             if (typeof displaySchedulesSection !== 'undefined' && typeof displaySchedulesSection === 'function') {
+                 addClickListenerOnce(sidebarItems.schedules.querySelector('a'), displaySchedulesSection);
+             } else {
+                 console.warn('displaySchedulesSection is not available; schedules link will not be wired.');
+             }
         }
-         if (sidebarItems.shifts && !sidebarItems.shifts.classList.contains('hidden')) {
-             addClickListenerOnce(sidebarItems.shifts.querySelector('a'), displayShiftsSection);
+        if (sidebarItems.shifts && !sidebarItems.shifts.classList.contains('hidden')) {
+             if (typeof displayShiftsSection !== 'undefined' && typeof displayShiftsSection === 'function') {
+                 addClickListenerOnce(sidebarItems.shifts.querySelector('a'), displayShiftsSection);
+             } else {
+                 console.warn('displayShiftsSection is not available; shifts link will not be wired.');
+             }
         }
         if (sidebarItems.payrollRuns && !sidebarItems.payrollRuns.classList.contains('hidden')) {
              addClickListenerOnce(sidebarItems.payrollRuns.querySelector('a'), displayPayrollRunsSection);

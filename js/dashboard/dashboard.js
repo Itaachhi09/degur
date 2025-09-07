@@ -51,15 +51,17 @@ export async function displayDashboardSection() {
     console.log("[Dashboard] Current user:", user);
 
     pageTitleElement.textContent = `${user.role_name} Dashboard`;
-    // Add containers for summary, charts, and quick actions
+    // Add containers for summary, charts, and quick actions inside a centered wrapper
     mainContentArea.innerHTML = `
-        <div id="dashboard-summary-container" class="mb-8">
-            <p class="text-center py-4 text-gray-500">Loading dashboard summary...</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div id="dashboard-summary-container" class="mb-8">
+                <p class="text-center py-4 text-gray-500">Loading dashboard summary...</p>
+            </div>
+            <div id="dashboard-quick-actions-container" class="mb-8">
+            </div>
+            <div id="dashboard-charts-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            </div>
         </div>
-        <div id="dashboard-quick-actions-container" class="mb-8">
-            </div>
-        <div id="dashboard-charts-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            </div>
     `;
     dashboardSummaryContainer = document.getElementById('dashboard-summary-container');
     dashboardChartsContainer = document.getElementById('dashboard-charts-container'); // Assign new container
@@ -223,13 +225,13 @@ function renderEmployeeQuickActions() {
  */
 function createSummaryCard(title, value, iconClass, bgColor, textColor, iconColor, valueColor) {
     return `
-        <div class="${bgColor} p-6 rounded-lg shadow-lg border border-[#EADDCB] hover:shadow-xl transition-shadow duration-300 ease-in-out">
+        <div class="${bgColor} p-6 rounded-lg shadow-sm border border-[#EADDCB] hover:shadow-md transition-shadow duration-200 ease-in-out">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium ${textColor} uppercase tracking-wider">${title}</p>
                     <p class="text-3xl font-bold ${valueColor}">${value}</p>
                 </div>
-                <div class="p-3 bg-opacity-20 bg-[#594423] rounded-full">
+                <div class="p-3 bg-white/5 rounded-full">
                     <i class="fas ${iconClass} ${iconColor} text-2xl"></i>
                 </div>
             </div>
